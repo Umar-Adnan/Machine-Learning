@@ -13,7 +13,7 @@ print(df_label[["Name", "Gender", "Gender_Encoded", "Passed", "Passed_Encoded"]]
 
 print("\n One-Hot Encoded Data (City):  ")
 df_encoded = pd.get_dummies(df_label, columns=["City"], dtype = int)
-# get_dummies breaks down a column and make subcolumns so that binary values can be assigned to it.
+# get_dummies breaks down a column and make subcolumns so that binary values can be assigned to it like 1/0 or True/False
 # By default, it assigns boolean values but we can change it using "dtype = data_type"
-# Like City_Chennai, City_Delhi and City_Mumbai, each having binary values easily understandable for the model.
+# Like City_Chennai, City_Delhi and City_Mumbai, each having binary values easily understandable by the model.
 print("\n", df_encoded)
