@@ -56,27 +56,47 @@ print(f"MAE : {mean_absolute_error(y_test_r, y_pred_r):.2f} average deaths off")
 print(f"R²  : {r2_score(y_test_r, y_pred_r):.4f}\n")
 
 # -----------------------------------------------------------------------------
-# 4. DATA VISUALIZATION (Matplotlib & Seaborn)
+# 4. DATA VISUALIZATION (Matplotlib & Seaborn) - UPDATED FOR BLACK & RED THEME
 # -----------------------------------------------------------------------------
-sns.set_theme(style="darkgrid")
+# Apply global dark background and custom theme colors
+plt.style.use('dark_background')
+sns.set_theme(style="darkgrid", rc={
+    "axes.facecolor": "#0d0d0f",      # Dark background for plot area
+    "figure.facecolor": "#0d0d0f",    # Dark background for the whole figure
+    "grid.color": "#2a2a2a",          # Subtle grid lines
+    "text.color": "white",            # White text for readability
+    "axes.labelcolor": "white",
+    "xtick.color": "white",
+    "ytick.color": "white"
+})
+
 fig, axes = plt.subplots(1, 2, figsize=(14, 6))
+fig.patch.set_facecolor('#0d0d0f') # Ensure the figure border matches the background
 
 # Plot 1: Classification Confusion Matrix
 cm = confusion_matrix(y_test_c, y_pred_c)
-sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', ax=axes[0], cbar=False,
+# Generate a dark-to-crimson colormap
+red_cmap = sns.dark_palette("#e11d48", as_cmap=True) 
+
+sns.heatmap(cm, annot=True, fmt='d', cmap=red_cmap, ax=axes[0], cbar=False,
             xticklabels=['Pred: Fail', 'Pred: Success'],
             yticklabels=['Actual: Fail', 'Actual: Success'])
 axes[0].set_title('Classification: Predict Attack Success\n(Confusion Matrix)', fontsize=14, pad=15)
 
 # Plot 2: Regression Actual vs Predicted Scatter
-sns.scatterplot(x=y_test_r, y=y_pred_r, alpha=0.3, color='crimson', ax=axes[1])
-# Draw a perfect prediction line (y = x)
+sns.scatterplot(x=y_test_r, y=y_pred_r, alpha=0.4, color='#e11d48', ax=axes[1])
+
+# Draw a perfect prediction line (y = x) - Updated to white for contrast
 max_val = max(y_test_r.max(), y_pred_r.max())
-axes[1].plot([0, max_val], [0, max_val], color='black', linestyle='--', label='Perfect Prediction')
+axes[1].plot([0, max_val], [0, max_val], color='white', linestyle='--', label='Perfect Prediction')
+
 axes[1].set_xlabel('Actual Fatalities (nkill)')
 axes[1].set_ylabel('Predicted Fatalities (nkill)')
 axes[1].set_title('Regression: Predict Fatalities\n(Actual vs. Predicted)', fontsize=14, pad=15)
-axes[1].legend()
+
+# Style the legend for dark mode
+legend = axes[1].legend(facecolor='#0d0d0f', edgecolor='#2a2a2a')
+plt.setp(legend.get_texts(), color='white')
 
 plt.tight_layout()
 plt.show()
